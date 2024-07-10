@@ -7,7 +7,6 @@ from colorama import init, Fore, Style
 import os
 import platform
 
-#import subprocess
 import paramiko
 import urllib.parse
 import requests
