@@ -1,0 +1,2 @@
+# Godmode
+Simple python tool
