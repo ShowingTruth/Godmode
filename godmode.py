@@ -220,7 +220,7 @@ def main():
                     print(f"{Fore.RED}Invalid choice. Please enter a valid option.\n")
 
         elif choice == "3":  # Exit
-            print(f"\n{Fore.YELLOW}Exiting NEO's Toolset. Stay safe!\n")
+            print(f"\n{Fore.YELLOW}Exiting NEO's Toolset. You are no longer invulnerable. Stay safe!\n")
             pause_and_countdown()
             clear_console()
             break
